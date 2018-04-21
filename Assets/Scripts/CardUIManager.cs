@@ -17,6 +17,8 @@ public class CardUIManager : MonoBehaviour
     // Width of card
     public float cardWidth = 200;
 
+    public Text cavnasText;
+
     public void Start()
     {
         cardManager = GetComponent<CardManager>();
@@ -26,13 +28,21 @@ public class CardUIManager : MonoBehaviour
         }
     }
 
+    public void Update()
+    {
+        cavnasText.text = "Deck size: " + cardManager.deck.Count + '\n'
+        + "Discard size: " + cardManager.discardPile.Count;
+    }
+
     public void DrawCard()
     {
-		// Only show a new card if one has been drawn
-        if (cardManager.draw(1) == false) {
-			return;
-		}
-        Card newCard = cardManager.hand[cardManager.hand.Count - 1];
+        // Only show a new card if one has been drawn
+        if (cardManager.draw(1) == false)
+        {
+            return;
+        }
+        int cardIndex = cardManager.hand.Count - 1;
+        Card newCard = cardManager.hand[cardIndex];
         GameObject newCardObject = null;
         switch (newCard.type)
         {
@@ -55,10 +65,22 @@ public class CardUIManager : MonoBehaviour
         // Set the width and height
         float cardHeight = handView.GetComponent<RectTransform>().rect.height;
         newUiCard.GetComponent<RectTransform>().sizeDelta = new Vector2(cardWidth, cardHeight);
+        // Set the card's data
+        newUiCard.GetComponent<UICard>().card = newCard;
+        // Add an event handler for when it is clicked
+        newUiCard.GetComponent<Button>()
+         .onClick
+         .AddListener(() =>
+         {
+             useCard(newUiCard.GetComponent<UICard>());
+         });
+
     }
 
-    public void useCard(Card card)
+    public void useCard(UICard uiCard)
     {
-        Debug.Log("using card type: " + card.type);
+        Debug.Log("using card type: " + uiCard.card.type);
+        cardManager.useCardInHand(uiCard.card);
+        Destroy(uiCard.gameObject);
     }
 }

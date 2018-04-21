@@ -13,10 +13,10 @@ public enum CardType
 public class CardManager : MonoBehaviour
 {
     // List of current deck
-    private Stack<Card> deck = new Stack<Card>();
+    public Stack<Card> deck = new Stack<Card>();
 
     // Discard pile
-    private Stack<Card> discardPile = new Stack<Card>();
+    public Stack<Card> discardPile = new Stack<Card>();
 
     // List of current hand
     public readonly List<Card> hand = new List<Card>();
@@ -37,12 +37,10 @@ public class CardManager : MonoBehaviour
     }
 
     // Function to consume a card in hand
-    public void useCardInHand(int index)
+    public void useCardInHand(Card selectedCard)
     {
-        // Get card used
-        Card selectedCard = hand[index];
         // Remove from hand
-        hand.RemoveAt(index);
+        hand.Remove(selectedCard);
         // Use ability
         selectedCard.use();
         // Add to discard
@@ -58,6 +56,7 @@ public class CardManager : MonoBehaviour
             // Check if the deck needs ot be reshuffled
             if (deck.Count == 0)
             {
+				Debug.Log("Deck empty, shuffling");
                 shuffleDiscardIntoDeck();
                 if (deck.Count == 0)
                 {

@@ -357,7 +357,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 'Card count:'
+  m_Text: Card count text
 --- !u!222 &807055010
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -684,6 +684,8 @@ MonoBehaviour:
   jumpCard: {fileID: 1251088192383664, guid: b40521bfa8fcce443adb054c2b359fdf, type: 2}
   duckCard: {fileID: 1337268941331070, guid: 84e59b8fdd77be640bfeb457760f64bf, type: 2}
   handView: {fileID: 1097179812}
+  cardWidth: 200
+  cavnasText: {fileID: 807055009}
 --- !u!114 &1413292458
 MonoBehaviour:
   m_ObjectHideFlags: 0
