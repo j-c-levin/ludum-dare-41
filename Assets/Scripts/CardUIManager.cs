@@ -79,7 +79,12 @@ public class CardUIManager : MonoBehaviour
             return;
         }
         // Use the card's effect
-        cardManager.useCardInHand(uiCard.card);
+        bool cardRemoved = cardManager.useCardInHand(uiCard.card);
+        // Check if the card should remain in the hand
+        if (cardRemoved == false)
+        {
+            return;
+        }
         // Remove from the game ui
         Destroy(uiCard.gameObject);
         // Redraw a new card

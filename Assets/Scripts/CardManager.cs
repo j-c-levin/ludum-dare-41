@@ -49,15 +49,24 @@ public class CardManager : MonoBehaviour
         discardPile.Push(newCard);
     }
 
-    // Function to consume a card in hand
-    public void useCardInHand(Card selectedCard)
+    // Function to consume a card in hand, returns true if card is removed
+    public bool useCardInHand(Card selectedCard)
     {
-        // Remove from hand
-        hand.Remove(selectedCard);
         // Use ability
         selectedCard.use(runner);
+        // Check if the card is to be removed from the hand
+        Debug.Log("can remove: " + selectedCard.canRemoveCard);
+        if (selectedCard.canRemoveCard == false)
+        {
+            return false;
+        }
+        // Remove from hand
+        hand.Remove(selectedCard);
         // Add to discard
         discardPile.Push(selectedCard);
+        // If the card has anything it needs to do to reset, do so
+        selectedCard.reset();
+        return true;
     }
 
     // Function to draw a new card from deck to hand
