@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Zone : MonoBehaviour
 {
-    private bool testMode = true;
+    private bool testMode = false;
     private float moveSpeed = -0.2f;
     private Camera mainCamera;
     private float respawnPosition;
