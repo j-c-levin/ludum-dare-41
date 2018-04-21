@@ -25,9 +25,17 @@ public class Runner : MonoBehaviour
     private enum RunnerState
     {
         Crouching,
-        Standing
+        Standing,
+        Jumping
     }
-    private RunnerState currentState;
+    private RunnerState runnerState;
+    // If the runner is in the air you can't activate a crouching card
+    private enum AirbornState
+    {
+        Jumping,
+        Landed
+    }
+    private AirbornState airbornState;
     // Have a reference to the ducking animation so that it can be cancelled mid way if a second card is played;
     private Coroutine duckingAnimation;
 
@@ -49,15 +57,23 @@ public class Runner : MonoBehaviour
         }
     }
 
+    public bool canPlayCard(Card card)
+    {
+        // Ducking whilst in the air is not allowed
+        return (card.type == CardType.Duck && airbornState == AirbornState.Jumping) == false;
+    }
+
     public void Jump()
     {
-        SingleJumpSequence();
-        if (runnerSprite.sprite == runnerDuckingSprite)
+        // Stop the ducking animation if it's playing
+        if (duckingAnimation != null)
         {
-            runnerSprite.sprite = runnerStandingSprite;
-            runnerCollider.size = standingColliderSize;
-            runner.transform.Translate(new Vector2(0, translationBetweenSizes));
+            StopCoroutine(duckingAnimation);
         }
+        // Stand the runner up
+        ChangeRunnerState(RunnerState.Standing);
+        // Jump
+        SingleJumpSequence();
     }
 
     public void Duck()
@@ -80,16 +96,21 @@ public class Runner : MonoBehaviour
     private void ChangeRunnerState(RunnerState newState)
     {
         // Only change the sprite if the state is not in the new state
-        if (currentState == newState)
+        if (runnerState == newState)
         {
             return;
         }
-        currentState = newState;
+        // Set the new sprite
         runnerSprite.sprite = (newState == RunnerState.Standing) ? runnerStandingSprite : runnerDuckingSprite;
+        // Set the new collider size
         runnerCollider.size = (newState == RunnerState.Standing) ? standingColliderSize : duckingColliderSize;
+        // Determine if the runner needs to be shifted up or down as the size changes
         int translationDirection = (newState == RunnerState.Standing) ? 1 : -1;
+        // Translate the runner
         Vector2 newTranslation = new Vector2(0, translationBetweenSizes * translationDirection);
         runner.transform.Translate(newTranslation);
+        // Set the new state
+        runnerState = newState;
     }
 
     private void SetInitialValues()
@@ -101,7 +122,7 @@ public class Runner : MonoBehaviour
         // Set the initial collider
         runnerCollider.size = standingColliderSize;
         // Set initial state
-        currentState = RunnerState.Standing;
+        runnerState = RunnerState.Standing;
     }
 
     private void SetupReferences()
@@ -116,9 +137,14 @@ public class Runner : MonoBehaviour
 
     private void SingleJumpSequence()
     {
+        airbornState = AirbornState.Jumping;
         // Jump up
         DOTween.Sequence()
         .Append(transform.DOMoveY(singleJumpHeight, jumpDuration).SetEase(Ease.OutQuad))
-        .Append(transform.DOMoveY(-singleJumpHeight, jumpDuration).SetEase(Ease.InQuad));
+        .Append(transform.DOMoveY(-singleJumpHeight, jumpDuration).SetEase(Ease.InQuad))
+        .AppendCallback(() =>
+        {
+            airbornState = AirbornState.Landed;
+        });
     }
 }

@@ -12,6 +12,8 @@ public enum CardType
 
 public class CardManager : MonoBehaviour
 {
+    // Reference to the player
+    public Runner runner;
     // List of current deck
     public Stack<Card> deck = new Stack<Card>();
     // Discard pile
@@ -26,8 +28,6 @@ public class CardManager : MonoBehaviour
     private int startingBasicCardCount = 3;
     // Starting number of cards in hand
     private int startingHandSize = 3;
-    // Reference to the player
-    private Runner runner;
 
     // Initialisation
     public void Start()

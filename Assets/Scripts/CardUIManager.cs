@@ -65,6 +65,11 @@ public class CardUIManager : MonoBehaviour
 
     public void useCard(UICard uiCard)
     {
+        // Check the card can be played
+        if (cardManager.runner.canPlayCard(uiCard.card) == false)
+        {
+            return;
+        }
         // Use the card's effect
         cardManager.useCardInHand(uiCard.card);
         // Remove from the game ui
