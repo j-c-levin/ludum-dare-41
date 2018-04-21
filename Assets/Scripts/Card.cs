@@ -5,5 +5,5 @@
         this.type = type;
     }
     public CardType type;
-    public void use() { }
+    public virtual void use(Runner runner) { }
 }

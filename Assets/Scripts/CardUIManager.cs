@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(CardManager))]
 public class CardUIManager : MonoBehaviour
 {
-
     // Prefab for jump
     public GameObject jumpCard;
     // Prefab for duck
@@ -16,33 +16,19 @@ public class CardUIManager : MonoBehaviour
     private CardManager cardManager;
     // Width of card
     public float cardWidth = 200;
+    // Draw card event
+    private CardManager.DrawCardDelegate drawCardHandler;
 
-    public Text cavnasText;
-
-    public void Start()
+    public void Awake()
     {
+        // Store card manager reference
         cardManager = GetComponent<CardManager>();
-        if (cardManager == null)
-        {
-            Debug.LogError("No card manager found on the same gameobject as CardUIManager");
-        }
+        // Subscribe to draw card event
+        cardManager.drawCardDelegate += DrawCard;
     }
 
-    public void Update()
+    public void DrawCard(Card newCard)
     {
-        cavnasText.text = "Deck size: " + cardManager.deck.Count + '\n'
-        + "Discard size: " + cardManager.discardPile.Count;
-    }
-
-    public void DrawCard()
-    {
-        // Only show a new card if one has been drawn
-        if (cardManager.draw(1) == false)
-        {
-            return;
-        }
-        int cardIndex = cardManager.hand.Count - 1;
-        Card newCard = cardManager.hand[cardIndex];
         GameObject newCardObject = null;
         switch (newCard.type)
         {
@@ -79,8 +65,11 @@ public class CardUIManager : MonoBehaviour
 
     public void useCard(UICard uiCard)
     {
-        Debug.Log("using card type: " + uiCard.card.type);
+        // Use the card's effect
         cardManager.useCardInHand(uiCard.card);
+        // Remove from the game ui
         Destroy(uiCard.gameObject);
+        // Redraw a new card
+        cardManager.draw(1);
     }
 }

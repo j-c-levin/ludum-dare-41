@@ -14,20 +14,30 @@ public class CardManager : MonoBehaviour
 {
     // List of current deck
     public Stack<Card> deck = new Stack<Card>();
-
     // Discard pile
     public Stack<Card> discardPile = new Stack<Card>();
-
+    // Delegate for listening for drawing cards
+    public delegate void DrawCardDelegate(Card drawnCard);
+    // Event listener for drawing cards
+    public DrawCardDelegate drawCardDelegate;
     // List of current hand
     public readonly List<Card> hand = new List<Card>();
-
-    // Starting number of cards
+    // Starting number of basic card types
     private int startingBasicCardCount = 3;
+    // Starting number of cards in hand
+    private int startingHandSize = 3;
+    // Reference to the player
+    private Runner runner;
 
     // Initialisation
     public void Start()
     {
         setUpDeck();
+        runner = GameObject.FindGameObjectWithTag("Runner").GetComponent<Runner>();
+        if (runner == null)
+        {
+            Debug.LogError("No runner found in scene");
+        }
     }
 
     // Function to add a card to a deck
@@ -42,13 +52,13 @@ public class CardManager : MonoBehaviour
         // Remove from hand
         hand.Remove(selectedCard);
         // Use ability
-        selectedCard.use();
+        selectedCard.use(runner);
         // Add to discard
         discardPile.Push(selectedCard);
     }
 
     // Function to draw a new card from deck to hand
-    public bool draw(int drawNumber)
+    public void draw(int drawNumber)
     {
         // Check if deck needs discard pile to be shuffled in
         for (int i = 0; i < drawNumber; i++)
@@ -56,18 +66,22 @@ public class CardManager : MonoBehaviour
             // Check if the deck needs ot be reshuffled
             if (deck.Count == 0)
             {
-				Debug.Log("Deck empty, shuffling");
+                Debug.Log("Deck empty, shuffling");
                 shuffleDiscardIntoDeck();
                 if (deck.Count == 0)
                 {
                     Debug.Log("Shuffled discard pile into deck but no cards remain to draw, deck is empty");
-                    return false;
+                    return;
                 }
             }
             // Draw a card from deck to hand
-            hand.Add(deck.Pop());
+            Card topCard = deck.Pop();
+            hand.Add(topCard);
+            if (drawCardDelegate != null)
+            {
+                drawCardDelegate(topCard);
+            }
         }
-        return true;
     }
 
     // Initalise the deck with the same number of basic cards
@@ -78,16 +92,22 @@ public class CardManager : MonoBehaviour
             discardPile.Push(new JumpCard());
             discardPile.Push(new DuckCard());
         }
-		shuffleDiscardIntoDeck();
+        shuffleDiscardIntoDeck();
     }
 
     // Shuffle the discard pile back into the deck when the deck pile is empty and something is drawn
     private void shuffleDiscardIntoDeck()
     {
+        // Get the discard pile as an array
         Card[] tempDeck = discardPile.ToArray();
+        // Shuffle the pile
         new System.Random().Shuffle(tempDeck);
+        // Reset the discard pile
         discardPile.Clear();
+        // Assign the deck the shuffled pile
         deck = new Stack<Card>(tempDeck);
+        // Draw the starting cards
+        draw(startingHandSize);
     }
 }
 
