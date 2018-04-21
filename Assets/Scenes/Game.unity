@@ -454,8 +454,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   focusedFloor: 1
-  zone: {fileID: 1146076710011106, guid: 20806fd929f9a7c46bdeef1c46731fa2, type: 2}
-  rockCardPrefab: {fileID: 0}
+  zonePrefab: {fileID: 1146076710011106, guid: 20806fd929f9a7c46bdeef1c46731fa2, type: 2}
+  rockCardPrefab: {fileID: 1709228304839990, guid: 32106c00dbcb2714d9f703a050f1c9fa,
+    type: 2}
   drawThreeCardPrefab: {fileID: 0}
   groundEnemyPrefab: {fileID: 0}
   flyingEnemyPrefab: {fileID: 0}
@@ -471,8 +472,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   focusedFloor: 0
-  zone: {fileID: 1146076710011106, guid: 20806fd929f9a7c46bdeef1c46731fa2, type: 2}
-  rockCardPrefab: {fileID: 0}
+  zonePrefab: {fileID: 1146076710011106, guid: 20806fd929f9a7c46bdeef1c46731fa2, type: 2}
+  rockCardPrefab: {fileID: 1709228304839990, guid: 32106c00dbcb2714d9f703a050f1c9fa,
+    type: 2}
   drawThreeCardPrefab: {fileID: 0}
   groundEnemyPrefab: {fileID: 0}
   flyingEnemyPrefab: {fileID: 0}
