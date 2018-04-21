@@ -9,5 +9,6 @@ public class RockObject : MonoBehaviour
         // Add a card to the discard pile in the card manager
         CardManager manager = GameObject.FindGameObjectWithTag("CardManager").GetComponent<CardManager>();
         manager.pickUpCard(new RockCard());
+        Destroy(this.gameObject);
     }
 }

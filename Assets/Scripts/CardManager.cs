@@ -55,7 +55,6 @@ public class CardManager : MonoBehaviour
         // Use ability
         selectedCard.use(runner);
         // Check if the card is to be removed from the hand
-        Debug.Log("can remove: " + selectedCard.canRemoveCard);
         if (selectedCard.canRemoveCard == false)
         {
             return false;

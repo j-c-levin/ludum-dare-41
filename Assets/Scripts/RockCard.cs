@@ -14,7 +14,6 @@ public class RockCard : Card
     public override void use(Runner runner)
     {
         currentHealth -= 1;
-        Debug.Log("health:" + currentHealth + " " + canRemoveCard);
         // Remove the card if it has been clicked the required amount of times
         if (currentHealth <= 0)
         {
@@ -25,7 +24,6 @@ public class RockCard : Card
     public override void reset()
     {
         currentHealth = clicksToRemove;
-        Debug.Log("resetting: " + currentHealth);
         canRemoveCard = false;
     }
 }
