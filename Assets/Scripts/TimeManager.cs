@@ -4,14 +4,12 @@ using UnityEngine;
 
 public class TimeManager : MonoBehaviour
 {
-    // The event delegate for ticks on the top floor
-    public delegate void TopFloorTickDelegate();
+    // The event delegate for ticks
+    public delegate void TickDelegate();
     // The event listener for ticks for the top floor
-    public TopFloorTickDelegate topFloorTickDelegate;
-    // The event delegate for ticks on the bottom floor
-    public delegate void BottomFloorTickDelegate();
+    public TickDelegate topFloorTickDelegate;
     // The event listener for ticks for the bottom floor
-    public BottomFloorTickDelegate bottomFloorTickDelegate;
+    public TickDelegate bottomFloorTickDelegate;
     // The range of time in which a tick can occur, i.e. +/- 1 second either way
     private float rangeOfPossibleTicks = 1f;
     // The beginning average time per tick at the start of the game
@@ -23,31 +21,40 @@ public class TimeManager : MonoBehaviour
     // private float stepAmountOfNextLevel;
     // The current top floor time to the next tick
     private float topFloorTimeToNextTick = 0;
-    // The current top floor time since last tick
-    private float topFloorTimeSinceLastTick = 0;
     // The current bottom floor time to the next tick
     private float bottomFloorTimeToNextTick = 0;
-    // The current bottom floor time since last tick
-    private float bottomFloorTimeSinceLastTick = 0;
 
     // Initialise everything
     public void Start()
     {
         // Set time to next ticks
         topFloorTimeToNextTick = getRandomTickTIme();
-		bottomFloorTimeToNextTick = getRandomTickTIme();
+        bottomFloorTimeToNextTick = getRandomTickTIme();
     }
 
     // Update loop which manages ticks
     public void Update()
     {
-		
+        updateTickTimer(ref topFloorTimeToNextTick, topFloorTickDelegate);
+        updateTickTimer(ref bottomFloorTimeToNextTick, bottomFloorTickDelegate);
     }
 
-	private void updateTickTime() 
-	{
-		
-	}
+    private void updateTickTimer(ref float timeTillTick, TickDelegate tickDelegate)
+    {
+        // Update the time until the next tick
+        timeTillTick -= Time.deltaTime;
+        // Check if a tick has occured
+        if (timeTillTick <= 0)
+        {
+            // Fire the event
+            if (tickDelegate != null)
+            {
+                tickDelegate();
+            }
+            // Reset the tick timer
+            timeTillTick = getRandomTickTIme();
+        }
+    }
 
     private float getRandomTickTIme()
     {
