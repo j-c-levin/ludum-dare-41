@@ -784,6 +784,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jumpCard: {fileID: 1251088192383664, guid: b40521bfa8fcce443adb054c2b359fdf, type: 2}
   duckCard: {fileID: 1337268941331070, guid: 84e59b8fdd77be640bfeb457760f64bf, type: 2}
+  changeFloorCard: {fileID: 1864538125933342, guid: ebfd4df3c662da3439ef0bdd707b3ef4,
+    type: 2}
   handView: {fileID: 118822198}
   cardWidth: 200
 --- !u!114 &1686400352

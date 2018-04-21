@@ -7,7 +7,8 @@ using System;
 public enum CardType
 {
     Jump,
-    Duck
+    Duck,
+    ChangeFloor
 }
 
 public class CardManager : MonoBehaviour
@@ -26,6 +27,7 @@ public class CardManager : MonoBehaviour
     public readonly List<Card> hand = new List<Card>();
     // Starting number of basic card types
     private int startingBasicCardCount = 3;
+    private int startingChangeFloorCardCount = 2;
     // Starting number of cards in hand
     private int startingHandSize = 3;
 
@@ -90,6 +92,11 @@ public class CardManager : MonoBehaviour
         {
             discardPile.Push(new JumpCard());
             discardPile.Push(new DuckCard());
+            // Only add a specific number of change floor cards
+            if (i < startingChangeFloorCardCount)
+            {
+                discardPile.Push(new ChangeFloorCard());
+            }
         }
         shuffleDiscardIntoDeck();
         // Draw the starting cards

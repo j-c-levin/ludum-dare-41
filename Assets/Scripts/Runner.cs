@@ -70,8 +70,8 @@ public class Runner : MonoBehaviour
 
     public bool canPlayCard(Card card)
     {
-        // Ducking whilst in the air is not allowed
-        return (card.type == CardType.Duck && airbornState != AirbornState.Landed) == false;
+        // Other cards whilst in the air is not allowed
+        return (airbornState != AirbornState.Landed) == false;
     }
 
     public void Jump()
@@ -83,15 +83,8 @@ public class Runner : MonoBehaviour
         }
         // Stand the runner up
         ChangeRunnerState(RunnerState.Standing);
-        // Decide if the runner should jump or go up a floor
-        if (airbornState == AirbornState.JumpingUpArc && floorState == FloorState.BottomFloor)
-        {
-            JumpToTopFloor();
-        }
-        else
-        {
-            SingleJumpSequence();
-        }
+        // Jump
+        SingleJumpSequence();
     }
 
     public void Duck()
@@ -101,6 +94,19 @@ public class Runner : MonoBehaviour
             StopCoroutine(duckingAnimation);
         }
         duckingAnimation = StartCoroutine("DuckingRoutine");
+    }
+
+    public void ChangeFloor()
+    {
+        // Stop the ducking animation if it's playing
+        if (duckingAnimation != null)
+        {
+            StopCoroutine(duckingAnimation);
+        }
+        // Stand the runner up
+        ChangeRunnerState(RunnerState.Standing);
+        // Change the floor
+        JumpToOtherFloor();
     }
 
     IEnumerator DuckingRoutine()
@@ -193,7 +199,7 @@ public class Runner : MonoBehaviour
         });
     }
 
-    private void JumpToTopFloor()
+    private void JumpToOtherFloor()
     {
         // Hijack the animation by stopping the first jump
         singleJumpSequence.Kill();

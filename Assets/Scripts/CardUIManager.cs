@@ -10,6 +10,8 @@ public class CardUIManager : MonoBehaviour
     public GameObject jumpCard;
     // Prefab for duck
     public GameObject duckCard;
+    // Prefab for change floor
+    public GameObject changeFloorCard;
     // The Scroll View for the hand
     public GameObject handView;
     // Reference for CardManager
@@ -38,8 +40,11 @@ public class CardUIManager : MonoBehaviour
             case CardType.Duck:
                 newCardObject = duckCard;
                 break;
+            case CardType.ChangeFloor:
+                newCardObject = changeFloorCard;
+                break;
             default:
-                Debug.LogError("Cannot match new card type: " + newCard.type + " to a game object");
+                Debug.LogError("Cannot match new card type: " + newCard.type + " to a prefab");
                 return;
         }
         // Instantiate the card
