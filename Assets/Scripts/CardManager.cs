@@ -7,22 +7,7 @@ using System;
 public enum CardType
 {
     Jump,
-    Duck,
-    Dash,
-    PickupThree,
-    HandSizeIncrease,
-    WildCard,
-    WildDraw
-}
-
-public class Card
-{
-    public Card(CardType type)
-    {
-        this.type = type;
-    }
-    public CardType type;
-    public void use() { }
+    Duck
 }
 
 public class CardManager : MonoBehaviour
@@ -34,7 +19,7 @@ public class CardManager : MonoBehaviour
     private Stack<Card> discardPile = new Stack<Card>();
 
     // List of current hand
-    private List<Card> hand = new List<Card>();
+    public readonly List<Card> hand = new List<Card>();
 
     // Starting number of cards
     private int startingBasicCardCount = 3;
@@ -59,28 +44,31 @@ public class CardManager : MonoBehaviour
         // Remove from hand
         hand.RemoveAt(index);
         // Use ability
+        selectedCard.use();
         // Add to discard
         discardPile.Push(selectedCard);
     }
 
     // Function to draw a new card from deck to hand
-    public void draw(int drawNumber = 1)
+    public bool draw(int drawNumber)
     {
         // Check if deck needs discard pile to be shuffled in
         for (int i = 0; i < drawNumber; i++)
         {
+            // Check if the deck needs ot be reshuffled
             if (deck.Count == 0)
             {
                 shuffleDiscardIntoDeck();
                 if (deck.Count == 0)
                 {
-                    Debug.LogError("Should have shuffled the discard pile into the deck but the deck is still empty!!!");
+                    Debug.Log("Shuffled discard pile into deck but no cards remain to draw, deck is empty");
+                    return false;
                 }
             }
             // Draw a card from deck to hand
-            Card topCard = deck.Pop();
-            hand.Add(topCard);
+            hand.Add(deck.Pop());
         }
+        return true;
     }
 
     // Initalise the deck with the same number of basic cards
@@ -88,10 +76,10 @@ public class CardManager : MonoBehaviour
     {
         for (int i = 0; i < startingBasicCardCount; i++)
         {
-            deck.Push(new Card(CardType.Dash));
-            deck.Push(new Card(CardType.Duck));
-            deck.Push(new Card(CardType.Jump));
+            discardPile.Push(new JumpCard());
+            discardPile.Push(new DuckCard());
         }
+		shuffleDiscardIntoDeck();
     }
 
     // Shuffle the discard pile back into the deck when the deck pile is empty and something is drawn
