@@ -18,8 +18,6 @@ public class CardUIManager : MonoBehaviour
     private CardManager cardManager;
     // Width of card
     public float cardWidth = 200;
-    // Draw card event
-    private CardManager.DrawCardDelegate drawCardHandler;
 
     public void Awake()
     {
