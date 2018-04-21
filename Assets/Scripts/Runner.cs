@@ -20,7 +20,10 @@ public class Runner : MonoBehaviour
     // Animation variables
     // How far to shift the runner object down or up based on how it grows and shrinks
     private float translationBetweenSizes = 0.3f;
-    private float singleJumpHeight = 0.85f;
+    private float bottomFloorJumpHeight = 0.85f;
+    private float bottomFloorLandingHeight = -0.85f;
+    private float topFloorJumpHeight = 4.22f;
+    private float topFloorLandingHeight = 2.76f;
     private float jumpDuration = 0.3f;
     private enum RunnerState
     {
@@ -32,12 +35,20 @@ public class Runner : MonoBehaviour
     // If the runner is in the air you can't activate a crouching card
     private enum AirbornState
     {
-        Jumping,
+        JumpingUpArc,
+        JumpingDownArc,
         Landed
     }
     private AirbornState airbornState;
+    private enum FloorState
+    {
+        TopFloor,
+        BottomFloor
+    }
+    private FloorState floorState;
     // Have a reference to the ducking animation so that it can be cancelled mid way if a second card is played;
     private Coroutine duckingAnimation;
+    private Sequence singleJumpSequence;
 
     public void Start()
     {
@@ -60,7 +71,7 @@ public class Runner : MonoBehaviour
     public bool canPlayCard(Card card)
     {
         // Ducking whilst in the air is not allowed
-        return (card.type == CardType.Duck && airbornState == AirbornState.Jumping) == false;
+        return (card.type == CardType.Duck && airbornState != AirbornState.Landed) == false;
     }
 
     public void Jump()
@@ -72,8 +83,15 @@ public class Runner : MonoBehaviour
         }
         // Stand the runner up
         ChangeRunnerState(RunnerState.Standing);
-        // Jump
-        SingleJumpSequence();
+        // Decide if the runner should jump or go up a floor
+        if (airbornState == AirbornState.JumpingUpArc && floorState == FloorState.BottomFloor)
+        {
+            JumpToTopFloor();
+        }
+        else
+        {
+            SingleJumpSequence();
+        }
     }
 
     public void Duck()
@@ -121,8 +139,10 @@ public class Runner : MonoBehaviour
         runnerSprite.sprite = runnerStandingSprite;
         // Set the initial collider
         runnerCollider.size = standingColliderSize;
-        // Set initial state
+        // Set initial states
         runnerState = RunnerState.Standing;
+        airbornState = AirbornState.Landed;
+        floorState = FloorState.BottomFloor;
     }
 
     private void SetupReferences()
@@ -137,14 +157,53 @@ public class Runner : MonoBehaviour
 
     private void SingleJumpSequence()
     {
-        airbornState = AirbornState.Jumping;
+        float jumpHeight;
+        float fallHeight;
+        // Jump and fall height changes based on which level you are on
+        if (floorState == FloorState.BottomFloor)
+        {
+            jumpHeight = bottomFloorJumpHeight;
+            fallHeight = bottomFloorLandingHeight;
+        }
+        else
+        {
+            jumpHeight = topFloorJumpHeight;
+            fallHeight = topFloorLandingHeight;
+        }
         // Jump up
-        DOTween.Sequence()
-        .Append(transform.DOMoveY(singleJumpHeight, jumpDuration).SetEase(Ease.OutQuad))
-        .Append(transform.DOMoveY(-singleJumpHeight, jumpDuration).SetEase(Ease.InQuad))
+        singleJumpSequence = DOTween.Sequence()
+        // Mark the state as jumping up
+        .AppendCallback(() =>
+        {
+            airbornState = AirbornState.JumpingUpArc;
+        })
+        // The jumping up arc
+        .Append(transform.DOMoveY(jumpHeight, jumpDuration).SetEase(Ease.OutQuad))
+        // Change the airborn state
+        .AppendCallback(() =>
+        {
+            airbornState = AirbornState.JumpingDownArc;
+        })
+        // Dropping back down arc
+        .Append(transform.DOMoveY(fallHeight, jumpDuration).SetEase(Ease.InQuad))
+        // Mark the state as on the ground
         .AppendCallback(() =>
         {
             airbornState = AirbornState.Landed;
+        });
+    }
+
+    private void JumpToTopFloor()
+    {
+        // Hijack the animation by stopping the first jump
+        singleJumpSequence.Kill();
+        // Jump to the second level
+        DOTween.Sequence()
+        .Append(transform.DOMoveY(topFloorLandingHeight, jumpDuration).SetEase(Ease.OutQuad))
+        .AppendCallback(() =>
+        {
+            airbornState = AirbornState.Landed;
+            floorState = FloorState.TopFloor;
         });
     }
 }

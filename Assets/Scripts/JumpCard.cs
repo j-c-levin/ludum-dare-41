@@ -2,7 +2,8 @@
 {
     public JumpCard() : base(CardType.Jump) { }
 
-     public override void use(Runner runner) {
+    public override void use(Runner runner)
+    {
         runner.Jump();
     }
 }
