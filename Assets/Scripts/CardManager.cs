@@ -8,23 +8,24 @@ public enum CardType
 {
     Jump,
     Duck,
-    ChangeFloor
+    ChangeFloor,
+    Rock
 }
 
 public class CardManager : MonoBehaviour
 {
     // Reference to the player
     public Runner runner;
-    // List of current deck
-    public Stack<Card> deck = new Stack<Card>();
-    // Discard pile
-    public Stack<Card> discardPile = new Stack<Card>();
     // Delegate for listening for drawing cards
     public delegate void DrawCardDelegate(Card drawnCard);
     // Event listener for drawing cards
     public DrawCardDelegate drawCardDelegate;
     // List of current hand
-    public readonly List<Card> hand = new List<Card>();
+    private List<Card> hand = new List<Card>();
+    // List of current deck
+    private Stack<Card> deck = new Stack<Card>();
+    // Discard pile
+    private Stack<Card> discardPile = new Stack<Card>();
     // Starting number of basic card types
     private int startingBasicCardCount = 3;
     private int startingChangeFloorCardCount = 2;
