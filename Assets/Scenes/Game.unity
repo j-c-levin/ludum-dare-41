@@ -466,7 +466,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4377686733673232, guid: 4b6fd1a71cb93ce458e6bb7ade69c5ce, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -0.13
+      value: -0.85
       objectReference: {fileID: 0}
     - target: {fileID: 4377686733673232, guid: 4b6fd1a71cb93ce458e6bb7ade69c5ce, type: 2}
       propertyPath: m_LocalPosition.z
@@ -491,30 +491,6 @@ Prefab:
     - target: {fileID: 4377686733673232, guid: 4b6fd1a71cb93ce458e6bb7ade69c5ce, type: 2}
       propertyPath: m_RootOrder
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1483992733510436, guid: 4b6fd1a71cb93ce458e6bb7ade69c5ce, type: 2}
-      propertyPath: m_Name
-      value: Runner
-      objectReference: {fileID: 0}
-    - target: {fileID: 212792492158339978, guid: 4b6fd1a71cb93ce458e6bb7ade69c5ce,
-        type: 2}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 05a9a958524cfa04da73b6e358f0fd98,
-        type: 3}
-    - target: {fileID: 61944151637685996, guid: 4b6fd1a71cb93ce458e6bb7ade69c5ce,
-        type: 2}
-      propertyPath: m_SpriteTilingProperty.oldSize.y
-      value: 1.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 61944151637685996, guid: 4b6fd1a71cb93ce458e6bb7ade69c5ce,
-        type: 2}
-      propertyPath: m_Size.y
-      value: 1.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1483992733510436, guid: 4b6fd1a71cb93ce458e6bb7ade69c5ce, type: 2}
-      propertyPath: m_TagString
-      value: Runner
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4b6fd1a71cb93ce458e6bb7ade69c5ce, type: 2}

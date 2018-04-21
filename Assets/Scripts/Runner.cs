@@ -8,31 +8,33 @@ using DG.Tweening;
 [RequireComponent(typeof(SpriteRenderer))]
 public class Runner : MonoBehaviour
 {
-    public Sprite runnerStandingSprite;
-    public Sprite runnerDuckingSprite;
-    public float jumpSpeed = 10;
-    public float gravity = 1;
+    // Useful references
     private Rigidbody2D runner;
     private SpriteRenderer runnerSprite;
     private BoxCollider2D runnerCollider;
+    public Sprite runnerStandingSprite;
+    public Sprite runnerDuckingSprite;
+    // Correctly sizes the box collider based on state
     private Vector2 standingColliderSize = new Vector2(0.60f, 1.2f);
     private Vector2 duckingColliderSize = new Vector2(0.60f, 0.6f);
-    private float translationBetweenSizes = 0.4f;
+    // Animation variables
+    // How far to shift the runner object down or up based on how it grows and shrinks
+    private float translationBetweenSizes = 0.3f;
+    private float singleJumpHeight = 0.85f;
+    private float jumpDuration = 0.3f;
+    private enum RunnerState
+    {
+        Crouching,
+        Standing
+    }
+    private RunnerState currentState;
+    // Have a reference to the ducking animation so that it can be cancelled mid way if a second card is played;
+    private Coroutine duckingAnimation;
 
     public void Start()
     {
-        // Store the reference to the rigidbody
-        runner = GetComponent<Rigidbody2D>();
-        // Store the reference to the runner sprite
-        runnerSprite = GetComponent<SpriteRenderer>();
-        // Store the reference to the runner collider
-        runnerCollider = GetComponent<BoxCollider2D>();
-        // Set the initial velocity
-        runner.velocity = new Vector2(0, 0);
-        // Set the initial sprite
-        runnerSprite.sprite = runnerStandingSprite;
-        // Set the initial collider
-        runnerCollider.size = standingColliderSize;
+        SetupReferences();
+        SetInitialValues();
     }
 
     public void FixedUpdate()
@@ -45,13 +47,11 @@ public class Runner : MonoBehaviour
         {
             Duck();
         }
-        float newVerticalVelocity = runner.velocity.y - gravity;
-        runner.velocity = new Vector2(0, newVerticalVelocity);
     }
 
     public void Jump()
     {
-        runner.velocity = new Vector2(0, jumpSpeed);
+        SingleJumpSequence();
         if (runnerSprite.sprite == runnerDuckingSprite)
         {
             runnerSprite.sprite = runnerStandingSprite;
@@ -62,11 +62,63 @@ public class Runner : MonoBehaviour
 
     public void Duck()
     {
-        if (runnerSprite.sprite == runnerStandingSprite)
+        if (duckingAnimation != null)
         {
-            runnerSprite.sprite = runnerDuckingSprite;
-            runnerCollider.size = duckingColliderSize;
-            runner.transform.Translate(new Vector2(0, -translationBetweenSizes));
+            StopCoroutine(duckingAnimation);
         }
+        duckingAnimation = StartCoroutine("DuckingRoutine");
+    }
+
+    IEnumerator DuckingRoutine()
+    {
+        ChangeRunnerState(RunnerState.Crouching);
+        // The jump animation is made of an upwards and downwards arc, each with its own jump duration the ducking animation mimics this by ducking for an equal length of time
+        yield return new WaitForSeconds(jumpDuration * 2);
+        ChangeRunnerState(RunnerState.Standing);
+    }
+
+    private void ChangeRunnerState(RunnerState newState)
+    {
+        // Only change the sprite if the state is not in the new state
+        if (currentState == newState)
+        {
+            return;
+        }
+        currentState = newState;
+        runnerSprite.sprite = (newState == RunnerState.Standing) ? runnerStandingSprite : runnerDuckingSprite;
+        runnerCollider.size = (newState == RunnerState.Standing) ? standingColliderSize : duckingColliderSize;
+        int translationDirection = (newState == RunnerState.Standing) ? 1 : -1;
+        Vector2 newTranslation = new Vector2(0, translationBetweenSizes * translationDirection);
+        runner.transform.Translate(newTranslation);
+    }
+
+    private void SetInitialValues()
+    {
+        // Set the initial velocity
+        runner.velocity = new Vector2(0, 0);
+        // Set the initial sprite
+        runnerSprite.sprite = runnerStandingSprite;
+        // Set the initial collider
+        runnerCollider.size = standingColliderSize;
+        // Set initial state
+        currentState = RunnerState.Standing;
+    }
+
+    private void SetupReferences()
+    {
+        // Store the reference to the rigidbody
+        runner = GetComponent<Rigidbody2D>();
+        // Store the reference to the runner sprite
+        runnerSprite = GetComponent<SpriteRenderer>();
+        // Store the reference to the runner collider
+        runnerCollider = GetComponent<BoxCollider2D>();
+    }
+
+    private void SingleJumpSequence()
+    {
+        // Jump up
+        DOTween.Sequence()
+        .Append(transform.DOMoveY(singleJumpHeight, jumpDuration).SetEase(Ease.OutQuad))
+        .Append(transform.DOMoveY(-singleJumpHeight, jumpDuration).SetEase(Ease.InQuad));
     }
 }
