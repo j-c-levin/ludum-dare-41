@@ -66,11 +66,10 @@ public class CardManager : MonoBehaviour
             // Check if the deck needs ot be reshuffled
             if (deck.Count == 0)
             {
-                Debug.Log("Deck empty, shuffling");
                 shuffleDiscardIntoDeck();
+                // If the deck remains empty, it's because all available cards are already in the hand, so just do nothing
                 if (deck.Count == 0)
                 {
-                    Debug.Log("Shuffled discard pile into deck but no cards remain to draw, deck is empty");
                     return;
                 }
             }
@@ -93,6 +92,8 @@ public class CardManager : MonoBehaviour
             discardPile.Push(new DuckCard());
         }
         shuffleDiscardIntoDeck();
+        // Draw the starting cards
+        draw(startingHandSize);
     }
 
     // Shuffle the discard pile back into the deck when the deck pile is empty and something is drawn
@@ -106,8 +107,6 @@ public class CardManager : MonoBehaviour
         discardPile.Clear();
         // Assign the deck the shuffled pile
         deck = new Stack<Card>(tempDeck);
-        // Draw the starting cards
-        draw(startingHandSize);
     }
 }
 

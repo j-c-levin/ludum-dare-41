@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Zone : MonoBehaviour
 {
-	private float moveSpeed = -0.2f;
+    private bool testMode = true;
+    private float moveSpeed = -0.2f;
     private Camera mainCamera;
     private float respawnPosition;
 
@@ -18,7 +19,14 @@ public class Zone : MonoBehaviour
 
     public void FixedUpdate()
     {
+        // Don't run anything if testing is enabled
+        if (testMode)
+        {
+            return;
+        }
+        // Move the gameobject along
         transform.Translate(new Vector2(moveSpeed, 0));
+        // If the gameobject is past the left of the screen, move it to the right of the screen
         if (transform.position.x <= respawnPosition)
         {
             transform.position = new Vector2(respawnPosition * -1, 0);
