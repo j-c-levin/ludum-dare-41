@@ -28,15 +28,13 @@ public class Runner : MonoBehaviour
     private enum RunnerState
     {
         Crouching,
-        Standing,
-        Jumping
+        Standing
     }
     private RunnerState runnerState;
     // If the runner is in the air you can't activate a crouching card
     private enum AirbornState
     {
-        JumpingUpArc,
-        JumpingDownArc,
+        Airborn,
         Landed
     }
     private AirbornState airbornState;
@@ -54,18 +52,6 @@ public class Runner : MonoBehaviour
     {
         SetupReferences();
         SetInitialValues();
-    }
-
-    public void FixedUpdate()
-    {
-        if (Input.GetKeyDown("space"))
-        {
-            Jump();
-        }
-        if (Input.GetKeyDown("down"))
-        {
-            Duck();
-        }
     }
 
     public bool canPlayCard(Card card)
@@ -109,7 +95,31 @@ public class Runner : MonoBehaviour
         JumpToOtherFloor();
     }
 
-    IEnumerator DuckingRoutine()
+    private void SetInitialValues()
+    {
+        // Set the initial velocity
+        runner.velocity = new Vector2(0, 0);
+        // Set the initial sprite
+        runnerSprite.sprite = runnerStandingSprite;
+        // Set the initial collider
+        runnerCollider.size = standingColliderSize;
+        // Set initial states
+        runnerState = RunnerState.Standing;
+        airbornState = AirbornState.Landed;
+        floorState = FloorState.BottomFloor;
+    }
+
+    private void SetupReferences()
+    {
+        // Store the reference to the rigidbody
+        runner = GetComponent<Rigidbody2D>();
+        // Store the reference to the runner sprite
+        runnerSprite = GetComponent<SpriteRenderer>();
+        // Store the reference to the runner collider
+        runnerCollider = GetComponent<BoxCollider2D>();
+    }
+
+    private IEnumerator DuckingRoutine()
     {
         ChangeRunnerState(RunnerState.Crouching);
         // The jump animation is made of an upwards and downwards arc, each with its own jump duration the ducking animation mimics this by ducking for an equal length of time
@@ -137,30 +147,6 @@ public class Runner : MonoBehaviour
         runnerState = newState;
     }
 
-    private void SetInitialValues()
-    {
-        // Set the initial velocity
-        runner.velocity = new Vector2(0, 0);
-        // Set the initial sprite
-        runnerSprite.sprite = runnerStandingSprite;
-        // Set the initial collider
-        runnerCollider.size = standingColliderSize;
-        // Set initial states
-        runnerState = RunnerState.Standing;
-        airbornState = AirbornState.Landed;
-        floorState = FloorState.BottomFloor;
-    }
-
-    private void SetupReferences()
-    {
-        // Store the reference to the rigidbody
-        runner = GetComponent<Rigidbody2D>();
-        // Store the reference to the runner sprite
-        runnerSprite = GetComponent<SpriteRenderer>();
-        // Store the reference to the runner collider
-        runnerCollider = GetComponent<BoxCollider2D>();
-    }
-
     private void SingleJumpSequence()
     {
         float jumpHeight;
@@ -181,14 +167,14 @@ public class Runner : MonoBehaviour
         // Mark the state as jumping up
         .AppendCallback(() =>
         {
-            airbornState = AirbornState.JumpingUpArc;
+            airbornState = AirbornState.Airborn;
         })
         // The jumping up arc
         .Append(transform.DOMoveY(jumpHeight, jumpDuration).SetEase(Ease.OutQuad))
         // Change the airborn state
         .AppendCallback(() =>
         {
-            airbornState = AirbornState.JumpingDownArc;
+            airbornState = AirbornState.Airborn;
         })
         // Dropping back down arc
         .Append(transform.DOMoveY(fallHeight, jumpDuration).SetEase(Ease.InQuad))
@@ -201,15 +187,23 @@ public class Runner : MonoBehaviour
 
     private void JumpToOtherFloor()
     {
+
+        float floorToJumpTo = (floorState == FloorState.BottomFloor) ? topFloorLandingHeight : bottomFloorLandingHeight;
         // Hijack the animation by stopping the first jump
         singleJumpSequence.Kill();
         // Jump to the second level
         DOTween.Sequence()
-        .Append(transform.DOMoveY(topFloorLandingHeight, jumpDuration).SetEase(Ease.OutQuad))
+        // Set airborn state as airborn
+        .AppendCallback(() =>
+        {
+            airbornState = AirbornState.Airborn;
+        })
+        .Append(transform.DOMoveY(floorToJumpTo, jumpDuration).SetEase(Ease.OutQuad))
+        // Set state as landed and on the other floor than which it began on
         .AppendCallback(() =>
         {
             airbornState = AirbornState.Landed;
-            floorState = FloorState.TopFloor;
+            floorState = (floorState == FloorState.BottomFloor) ? FloorState.TopFloor : FloorState.BottomFloor;
         });
     }
 }
