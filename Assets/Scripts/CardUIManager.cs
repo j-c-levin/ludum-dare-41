@@ -82,6 +82,10 @@ public class CardUIManager : MonoBehaviour
         animateCardIn(newUiCard.GetComponent<RectTransform>());
         // Add to list
         uiCards[cardManager.hand.Count - 1] = newUiCard;
+        // Change the deck colour
+        deckImage.GetComponent<Image>().color = (cardManager.deck.Count == 0) ? Color.gray : Color.white;
+        // Change the discard pile colour
+        discardPileImage.GetComponent<Image>().color = (cardManager.discardPile.Count == 0) ? Color.gray : Color.white;
     }
 
     public void useCard(UICard uiCard)
@@ -130,6 +134,10 @@ public class CardUIManager : MonoBehaviour
         .AppendCallback(() =>
         {
             Destroy(card.gameObject);
+            if (cardManager.discardPile.Count != 0)
+            {
+                discardPileImage.GetComponent<Image>().color = Color.white;
+            }
         });
         // Bounce the card's y
         float yBounceTime = 0.3f;

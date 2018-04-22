@@ -23,9 +23,9 @@ public class CardManager : MonoBehaviour
     // List of current hand
     public readonly List<Card> hand = new List<Card>();
     // List of current deck
-    private Stack<Card> deck = new Stack<Card>();
+    public Stack<Card> deck = new Stack<Card>();
     // Discard pile
-    private Stack<Card> discardPile = new Stack<Card>();
+    public readonly Stack<Card> discardPile = new Stack<Card>();
     // Starting number of basic card types
     private int startingBasicCardCount = 3;
     private int startingChangeFloorCardCount = 2;
