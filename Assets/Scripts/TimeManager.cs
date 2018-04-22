@@ -42,7 +42,6 @@ public class TimeManager : MonoBehaviour
             averageTickTime -= stepAmountOfNextLevel;
             averageTickTime = Mathf.Clamp(averageTickTime, minTickDuration, 100);
             timeTillNextLevel = durationOfLevel;
-            Debug.Log("new level, new average: " + averageTickTime);
         }
     }
 
