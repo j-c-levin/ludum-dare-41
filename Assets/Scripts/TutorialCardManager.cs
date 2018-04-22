@@ -65,11 +65,16 @@ public class TutorialCardManager : MonoBehaviour
         }
     }
 
+    public void AddRockToHand()
+    {
+        deck.Push(new RockCard());
+        draw(1);
+    }
+
     // Initalise the deck with the same number of basic cards
     private void setUpDeck()
     {
         deck.Push(new ChangeFloorCard());
-        deck.Push(new RockCard());
         deck.Push(new DuckCard());
         deck.Push(new JumpCard());
         // Draw the starting cards

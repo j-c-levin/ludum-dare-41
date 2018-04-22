@@ -86,6 +86,11 @@ public class TutorialUICardManager : MonoBehaviour
         }
         // Remove from the game ui
         Destroy(uiCard.gameObject);
+        // For tutorial purposes, hold off on drawing before getting the rock
+        if (uiCard.card.type == CardType.Duck)
+        {
+            return;
+        }
         // Redraw a new card
         cardManager.draw(1);
     }
