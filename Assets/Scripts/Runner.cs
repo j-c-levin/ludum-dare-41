@@ -97,6 +97,9 @@ public class Runner : MonoBehaviour
 
     private void SetInitialValues()
     {
+        // Set the initial position
+        float xPosition = (Camera.main.ViewportToWorldPoint(Vector2.zero).x * 1) + 2;
+        transform.position = new Vector2(xPosition, transform.position.y);
         // Set the initial velocity
         runner.velocity = new Vector2(0, 0);
         // Set the initial sprite

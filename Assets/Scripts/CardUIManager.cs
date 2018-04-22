@@ -28,7 +28,7 @@ public class CardUIManager : MonoBehaviour
     // Width of card
     public float cardWidth = 188f;
     // X positions of the cards
-    private float[] cardPositions = new float[] { 1223f, 951f, 680f };
+    public GameObject[] cardPositions;
     // Reference for CardManager
     private CardManager cardManager;
     // List of current cards
@@ -75,6 +75,9 @@ public class CardUIManager : MonoBehaviour
         // Set the width and height
         float cardHeight = handView.GetComponent<RectTransform>().rect.height;
         newUiCard.GetComponent<RectTransform>().sizeDelta = new Vector2(cardWidth, cardHeight);
+        // Set anchor
+        newUiCard.GetComponent<RectTransform>().anchorMax = new Vector2(0f, 0.5f);
+        newUiCard.GetComponent<RectTransform>().anchorMin = new Vector2(0f, 0.5f);
         // Set the card's data
         newUiCard.GetComponent<UICard>().card = newCard;
         // Add an event handler for when it is clicked
@@ -117,7 +120,7 @@ public class CardUIManager : MonoBehaviour
 
     private void animateCardIn(RectTransform card)
     {
-        float xPosition = cardPositions[cardManager.hand.Count - 1];
+        float xPosition = cardPositions[cardManager.hand.Count - 1].transform.localPosition.x;
         Sequence s = DOTween.Sequence();
         s.Append(
             card.DOLocalMoveX(xPosition, 1f)
@@ -164,21 +167,21 @@ public class CardUIManager : MonoBehaviour
         s.Insert(0, card.DOLocalRotate(new Vector3(0, 0, -90), 0.5f));
         // Shuffle along the other cards in the array
         // The right one
-        if (card.position.x > 1)
+        if (card.localPosition.x > -700)
         {
-            float xPosition = cardPositions[0];
+            float xPosition = cardPositions[0].transform.localPosition.x;
             uiCards[0] = uiCards[1];
             uiCards[0].transform.DOLocalMoveX(xPosition, 1f)
             .SetEase(Ease.OutQuad);
-            xPosition = cardPositions[1];
+            xPosition = cardPositions[1].transform.localPosition.x;
             uiCards[1] = uiCards[2];
             uiCards[1].transform.DOLocalMoveX(xPosition, 1f)
             .SetEase(Ease.OutQuad);
         }
         // The middle one
-        else if (card.position.x > -1)
+        else if (card.localPosition.x > -1000)
         {
-            float xPosition = cardPositions[1];
+            float xPosition = cardPositions[1].transform.localPosition.x;
             uiCards[1] = uiCards[2];
             uiCards[1].transform.DOLocalMoveX(xPosition, 1f)
             .SetEase(Ease.OutQuad);
