@@ -5,8 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class TutorialGameRestart : MonoBehaviour
 {
-    public void RestartGame()
+    public void RestartTutorial()
     {
+        // Reset the game manager
+        GameManager.ResetLevel();
+        // Restart the tutorial
         SceneManager.LoadScene("Tutorial");
     }
 }

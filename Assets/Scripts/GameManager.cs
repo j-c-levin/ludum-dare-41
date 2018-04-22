@@ -31,4 +31,10 @@ public class GameManager : MonoBehaviour
         }
         GameObject.FindGameObjectWithTag("Finish").GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceCamera;
     }
+
+    public static void ResetLevel()
+    {
+        gameEndDelegate = null;
+        isGameRunning = true;
+    }
 }

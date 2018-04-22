@@ -7,6 +7,9 @@ public class GameRestart : MonoBehaviour
 {
     public void RestartGame()
     {
+        // Reset the game manager
+        GameManager.ResetLevel();
+        // Reload the level
         SceneManager.LoadScene("Game");
     }
 }
