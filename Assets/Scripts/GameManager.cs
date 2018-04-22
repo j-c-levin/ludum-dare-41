@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public GameObject endUI;
     public delegate void GameEndDelegate();
     public static GameEndDelegate gameEndDelegate;
     public static bool isGameRunning
@@ -22,10 +24,11 @@ public class GameManager : MonoBehaviour
     public static void EndGame()
     {
         isGameRunning = false;
-		// Call event listeners on the game ending
+        // Call event listeners on the game ending
         if (gameEndDelegate != null)
         {
             gameEndDelegate();
         }
+        GameObject.FindGameObjectWithTag("Finish").GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceCamera;
     }
 }
