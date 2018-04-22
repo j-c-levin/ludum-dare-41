@@ -24,7 +24,7 @@ public class Runner : MonoBehaviour
     private float bottomFloorLandingHeight = -0.85f;
     private float topFloorJumpHeight = 4.22f;
     private float topFloorLandingHeight = 2.76f;
-    private float jumpDuration = 0.3f;
+    private float jumpDuration = 0.4f;
     private enum RunnerState
     {
         Crouching,

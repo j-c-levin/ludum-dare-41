@@ -13,7 +13,7 @@ public class TimeManager : MonoBehaviour
     // The range of time in which a tick can occur, i.e. +/- 1 second either way
     private float rangeOfPossibleTicks = 1f;
     // The beginning average time per tick at the start of the game
-    private float averageTickTime = 2f;
+    private float averageTickTime = 3f;
     // Commented for now just to get stuff working
     // // How long should each level be before stepping up to the next
     // private float durationOfLevel;
