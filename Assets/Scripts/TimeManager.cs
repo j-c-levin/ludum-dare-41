@@ -14,11 +14,13 @@ public class TimeManager : MonoBehaviour
     private float rangeOfPossibleTicks = 1f;
     // The beginning average time per tick at the start of the game
     private float averageTickTime = 3f;
-    // Commented for now just to get stuff working
-    // // How long should each level be before stepping up to the next
-    // private float durationOfLevel;
-    // // How much shorter should the average time per tick get per step
-    // private float stepAmountOfNextLevel;
+    // How long should each level be before stepping up to the next
+    private float durationOfLevel = 10f;
+    private float timeTillNextLevel = 10f;
+    // How much shorter should the average time per tick get per step
+    private float stepAmountOfNextLevel = 0.2f;
+    // The fastest speed the game should get
+    private float minTickDuration = 1.5f;
     // The current top floor time to the next tick
     private float topFloorTimeToNextTick = 0;
     // The current bottom floor time to the next tick
@@ -29,6 +31,19 @@ public class TimeManager : MonoBehaviour
     {
         updateTickTimer(ref topFloorTimeToNextTick, topFloorTickDelegate);
         updateTickTimer(ref bottomFloorTimeToNextTick, bottomFloorTickDelegate);
+        updateLevelTime();
+    }
+
+    private void updateLevelTime()
+    {
+        timeTillNextLevel -= Time.deltaTime;
+        if (timeTillNextLevel <= 0)
+        {
+            averageTickTime -= stepAmountOfNextLevel;
+            averageTickTime = Mathf.Clamp(averageTickTime, minTickDuration, 100);
+            timeTillNextLevel = durationOfLevel;
+            Debug.Log("new level, new average: " + averageTickTime);
+        }
     }
 
     private void updateTickTimer(ref float timeTillTick, TickDelegate tickDelegate)
