@@ -68,7 +68,6 @@ public class CardUIManager : MonoBehaviour
          {
              useCard(newUiCard.GetComponent<UICard>());
          });
-
     }
 
     public void useCard(UICard uiCard)

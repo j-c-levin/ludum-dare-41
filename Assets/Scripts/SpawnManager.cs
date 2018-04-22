@@ -17,12 +17,8 @@ public class SpawnManager : MonoBehaviour
     public GameObject zonePrefab;
     // Rock card prefab
     public GameObject rockCardPrefab;
-    // Draw card prefab
-    public GameObject drawThreeCardPrefab;
     // Ground enemy prefab
-    public GameObject groundEnemyPrefab;
-    // Flying enemy prefab
-    public GameObject flyingEnemyPrefab;
+    public GameObject enemyPrefab;
     // Array to randomly pick something to spawn
     private GameObject[] spawnables;
     // Reference the Time Manager
@@ -39,7 +35,7 @@ public class SpawnManager : MonoBehaviour
     public void Start()
     {
         // Set spawnables array
-        spawnables = new GameObject[] { rockCardPrefab };
+        spawnables = new GameObject[] { /*rockCardPrefab*/enemyPrefab };
         // Set reference
         timeManager = GetComponent<TimeManager>();
         // Set up handler

@@ -56,8 +56,8 @@ public class Runner : MonoBehaviour
 
     public bool canPlayCard(Card card)
     {
-        // Other cards whilst in the air is not allowed
-        return (airbornState != AirbornState.Landed) == false;
+        // Using other cards whilst in the air is not allowed, also stops the player reacting once the game has ended
+        return (airbornState != AirbornState.Landed || GameManager.isGameRunning == false) == false;
     }
 
     public void Jump()
@@ -117,6 +117,8 @@ public class Runner : MonoBehaviour
         runnerSprite = GetComponent<SpriteRenderer>();
         // Store the reference to the runner collider
         runnerCollider = GetComponent<BoxCollider2D>();
+        // Subscribe to game end event
+        GameManager.gameEndDelegate += GameEndHandler;
     }
 
     private IEnumerator DuckingRoutine()
@@ -205,5 +207,12 @@ public class Runner : MonoBehaviour
             airbornState = AirbornState.Landed;
             floorState = (floorState == FloorState.BottomFloor) ? FloorState.TopFloor : FloorState.BottomFloor;
         });
+    }
+
+    // Sets the player to ragdoll on losing
+    private void GameEndHandler()
+    {
+        runner.bodyType = RigidbodyType2D.Dynamic;
+        runner.velocity = new Vector2(1, 5);
     }
 }
