@@ -27,6 +27,8 @@ public class CardUIManager : MonoBehaviour
     private float[] cardPositions = new float[] { 680f, 951f, 1223f };
     // Reference for CardManager
     private CardManager cardManager;
+    // List of current cards
+    private GameObject[] uiCards = new GameObject[3];
 
     public void Awake()
     {
@@ -78,6 +80,8 @@ public class CardUIManager : MonoBehaviour
          });
         // Animate the card
         animateCardIn(newUiCard.GetComponent<RectTransform>());
+        // Add to list
+        uiCards[cardManager.hand.Count - 1] = newUiCard;
     }
 
     public void useCard(UICard uiCard)
@@ -95,7 +99,7 @@ public class CardUIManager : MonoBehaviour
             return;
         }
         // Remove from the game ui
-        Destroy(uiCard.gameObject);
+        animateCardToDiscard(uiCard.GetComponent<RectTransform>());
         // Redraw a new card
         cardManager.draw(1);
     }
@@ -103,11 +107,59 @@ public class CardUIManager : MonoBehaviour
     private void animateCardIn(RectTransform card)
     {
         float xPosition = cardPositions[cardManager.hand.Count - 1];
-        card.DOLocalMoveX(xPosition, 1f).SetEase(Ease.OutQuad);
+        card.DOLocalMoveX(xPosition, 1f)
+        .SetEase(Ease.OutQuad);
     }
 
     private void animateCardToDiscard(RectTransform card)
     {
-
+        // Remove the used card
+        Sequence s = DOTween.Sequence();
+        s.Insert(0,
+            card.DOLocalMoveX(discardPileImage.transform.localPosition.x, 1f)
+            .SetEase(Ease.OutQuad)
+        )
+        // Destroy the card on end
+        .AppendCallback(() =>
+        {
+            Destroy(card.gameObject);
+        });
+        // Bounce the card's y
+        float yBounceTime = 0.3f;
+        s.Insert(0,
+            card.DOLocalMoveY(card.transform.localPosition.y + 100, yBounceTime)
+            .SetEase(Ease.OutQuad)
+        );
+        s.Insert(yBounceTime,
+            card.DOLocalMoveY(card.transform.localPosition.y, yBounceTime)
+            .SetEase(Ease.InQuad)
+        );
+        // Fade out the card
+        s.Insert(0.4f,
+            card.GetComponent<Image>().DOFade(0, 0.6f)
+        );
+        // Rotate the card
+        s.Insert(0, card.DOLocalRotate(new Vector3(0, 0, 90), 0.5f));
+        // Shuffle along the other cards in the array
+        // The left one
+        if (card.position.x < -1)
+        {
+            float xPosition = cardPositions[0];
+            uiCards[0] = uiCards[1];
+            uiCards[0].transform.DOLocalMoveX(xPosition, 1f)
+            .SetEase(Ease.OutQuad);
+            xPosition = cardPositions[1];
+            uiCards[1] = uiCards[2];
+            uiCards[1].transform.DOLocalMoveX(xPosition, 1f)
+            .SetEase(Ease.OutQuad);
+        }
+        // The middle one
+        else if (card.position.x < 1)
+        {
+            float xPosition = cardPositions[1];
+            uiCards[1] = uiCards[2];
+            uiCards[1].transform.DOLocalMoveX(xPosition, 1f)
+            .SetEase(Ease.OutQuad);
+        }
     }
 }
