@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class RockSpriteChanger : MonoBehaviour
 {
     public Sprite[] rockSprites;
-    int health = 1;
+    int health = 2;
     public void changeSprite()
     {
         // Change the sprite attached to the rock card.
