@@ -24,14 +24,6 @@ public class TimeManager : MonoBehaviour
     // The current bottom floor time to the next tick
     private float bottomFloorTimeToNextTick = 0;
 
-    // Initialise everything
-    public void Start()
-    {
-        // Set time to next ticks
-        topFloorTimeToNextTick = getRandomTickTIme();
-        bottomFloorTimeToNextTick = getRandomTickTIme();
-    }
-
     // Update loop which manages ticks
     public void Update()
     {

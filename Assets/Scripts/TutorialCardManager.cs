@@ -53,11 +53,14 @@ public class TutorialCardManager : MonoBehaviour
         for (int i = 0; i < drawNumber; i++)
         {
             // Draw a card from deck to hand
-            Card topCard = deck.Pop();
-            hand.Add(topCard);
-            if (drawCardDelegate != null)
+            if (deck.Count > 0)
             {
-                drawCardDelegate(topCard);
+                Card topCard = deck.Pop();
+                hand.Add(topCard);
+                if (drawCardDelegate != null)
+                {
+                    drawCardDelegate(topCard);
+                }
             }
         }
     }

@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 114325509940997112}
   - component: {fileID: 114273777795246718}
   m_Layer: 5
-  m_Name: Jump
+  m_Name: JumpCard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -68,7 +68,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d307d15800d6a3841b7e620ebd1bc4e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
 --- !u!114 &114325509940997112
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class TutorialZone : MonoBehaviour {
-    private float moveSpeed = -0.05f;
+    private float moveSpeed = -0.07f;
 
     // Loop to move the object along
     public void FixedUpdate()
