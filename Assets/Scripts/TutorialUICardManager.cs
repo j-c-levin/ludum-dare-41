@@ -29,6 +29,8 @@ public class TutorialUICardManager : MonoBehaviour
     public Text deckCounterText;
     // Counter for the discard pile
     public Text discardCounterText;
+    // Gameobject for aligning cards
+    public GameObject uiCard;
     private int discardCount = 0;
 
     public void Awake()
@@ -71,6 +73,9 @@ public class TutorialUICardManager : MonoBehaviour
         // Set the width and height
         float cardHeight = handView.GetComponent<RectTransform>().rect.height;
         newUiCard.GetComponent<RectTransform>().sizeDelta = new Vector2(cardWidth, cardHeight);
+        // Set anchor
+        // newUiCard.GetComponent<RectTransform>().anchorMax = new Vector2(0f, 0.5f);
+        // newUiCard.GetComponent<RectTransform>().anchorMin = new Vector2(0f, 0.5f);
         // Set the card's data
         newUiCard.GetComponent<UICard>().card = newCard;
         // Add an event handler for when it is clicked
@@ -81,7 +86,7 @@ public class TutorialUICardManager : MonoBehaviour
              useCard(newUiCard.GetComponent<UICard>());
          });
         //  Animate the card in 
-        float middleX = 951f;
+        float middleX = uiCard.transform.position.x;
         Sequence s = DOTween.Sequence();
         s.Append(
             newUiCard.GetComponent<RectTransform>()
