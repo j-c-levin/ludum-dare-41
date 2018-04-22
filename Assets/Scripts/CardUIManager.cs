@@ -21,6 +21,10 @@ public class CardUIManager : MonoBehaviour
     public GameObject deckImage;
     // The discard pilefor animating
     public GameObject discardPileImage;
+    // Counter for the deck
+    public Text deckCounterText;
+    // Counter for the discard pile
+    public Text discardCounterText;
     // Width of card
     public float cardWidth = 188f;
     // X positions of the cards
@@ -40,6 +44,8 @@ public class CardUIManager : MonoBehaviour
 
     public void DrawCard(Card newCard)
     {
+        deckCounterText.text = cardManager.deck.Count.ToString();
+        discardCounterText.text = cardManager.discardPile.Count.ToString();
         GameObject newCardObject = null;
         switch (newCard.type)
         {
@@ -102,6 +108,7 @@ public class CardUIManager : MonoBehaviour
         {
             return;
         }
+        discardCounterText.text = cardManager.discardPile.Count.ToString();
         // Remove from the game ui
         animateCardToDiscard(uiCard.GetComponent<RectTransform>());
         // Redraw a new card

@@ -25,6 +25,11 @@ public class TutorialUICardManager : MonoBehaviour
     public GameObject deckImage;
     // The discard pilefor animating
     public GameObject discardPileImage;
+    // Counter for the deck
+    public Text deckCounterText;
+    // Counter for the discard pile
+    public Text discardCounterText;
+    private int discardCount = 0;
 
     public void Awake()
     {
@@ -36,6 +41,7 @@ public class TutorialUICardManager : MonoBehaviour
 
     public void DrawCard(Card newCard)
     {
+        deckCounterText.text = cardManager.deck.Count.ToString();
         GameObject newCardObject = null;
         switch (newCard.type)
         {
@@ -105,6 +111,7 @@ public class TutorialUICardManager : MonoBehaviour
         {
             return;
         }
+        discardCounterText.text = (++discardCount).ToString();
         RectTransform card = uiCard.GetComponent<RectTransform>();
         // Remove the used card
         Sequence s = DOTween.Sequence();
