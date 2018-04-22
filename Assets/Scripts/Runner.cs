@@ -57,7 +57,7 @@ public class Runner : MonoBehaviour
     public bool canPlayCard(Card card)
     {
         // Using other cards whilst in the air is not allowed, also stops the player reacting once the game has ended
-        return (airbornState != AirbornState.Landed || GameManager.isGameRunning == false) == false;
+        return (airbornState != AirbornState.Landed || GameManager.isGameRunning == false || runnerState != RunnerState.Standing) == false;
     }
 
     public void Jump()
