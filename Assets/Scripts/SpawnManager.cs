@@ -35,7 +35,7 @@ public class SpawnManager : MonoBehaviour
     public void Start()
     {
         // Set spawnables array
-        spawnables = new GameObject[] { /*rockCardPrefab*/enemyPrefab };
+        spawnables = new GameObject[] { rockCardPrefab, enemyPrefab };
         // Set reference
         timeManager = GetComponent<TimeManager>();
         // Set up handler
@@ -62,7 +62,7 @@ public class SpawnManager : MonoBehaviour
     private void tickDelegateHandler()
     {
         // Pick thing to spawn
-        GameObject objectToSpawn = spawnables[Random.Range(0, spawnables.Length - 1)];
+        GameObject objectToSpawn = spawnables[Random.Range(0, spawnables.Length)];
         // Pick the height to spawn the zone based on whether it's top or bottom floor
         float floorSpawnHeight = (focusedFloor == Floor.BottomFloor) ? bottomFloorYSpawn : topFloorYSpawn;
         // Spawn the zone at the right height
