@@ -29,7 +29,7 @@ public class SpawnManager : MonoBehaviour
     private float topFloorYSpawn = 3.60f;
     // Spawn track heights
     private float bottomTrackSpawn = -1;
-    private float topTrackSpawn = 0;
+    private float topTrackSpawn = -0.3f;
 
     // Initialise
     public void Start()
