@@ -7,9 +7,16 @@ using UnityEngine.UI;
 public class RockSpriteChanger : MonoBehaviour
 {
     public Sprite[] rockSprites;
+    int health = 1;
     public void changeSprite()
     {
-        int health = GetComponent<RockCard>().currentHealth;
-        GetComponent<SpriteRenderer>().sprite = rockSprites[health - 1];
+        // Change the sprite attached to the rock card.
+        /*
+            Remember that the '--' operator decriments after the variable has been read.  So writing as health-- reads the value of 'health' and access the array at that index, and after that it decriments the value of health.
+         */
+        if (health >= 0)
+        {
+            GetComponent<Image>().sprite = rockSprites[health--];
+        }
     }
 }
