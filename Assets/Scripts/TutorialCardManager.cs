@@ -12,9 +12,9 @@ public class TutorialCardManager : MonoBehaviour
     // Event listener for drawing cards
     public DrawCardDelegate drawCardDelegate;
     // List of current hand
-    private List<Card> hand = new List<Card>();
+    public List<Card> hand = new List<Card>();
     // List of current deck
-    private Stack<Card> deck = new Stack<Card>();
+    public Stack<Card> deck = new Stack<Card>();
     // Starting number of cards in hand
     private int startingHandSize = 1;
 
@@ -67,6 +67,7 @@ public class TutorialCardManager : MonoBehaviour
 
     public void AddRockToHand()
     {
+        deck.Push(new ChangeFloorCard());
         deck.Push(new RockCard());
         draw(1);
     }
@@ -74,7 +75,6 @@ public class TutorialCardManager : MonoBehaviour
     // Initalise the deck with the same number of basic cards
     private void setUpDeck()
     {
-        deck.Push(new ChangeFloorCard());
         deck.Push(new DuckCard());
         deck.Push(new JumpCard());
         // Draw the starting cards

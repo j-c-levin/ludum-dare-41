@@ -86,6 +86,9 @@ public class TutorialUICardManager : MonoBehaviour
         newUiCard.GetComponent<Image>().color = new Color(1, 1, 1, 0);
         // Fade in
         s.Insert(0, newUiCard.GetComponent<Image>().DOFade(1, 0.5f));
+
+        // Change the deck colour
+        deckImage.GetComponent<Image>().color = (cardManager.deck.Count == 0) ? Color.gray : Color.white;
     }
 
     public void useCard(UICard uiCard)
@@ -113,6 +116,8 @@ public class TutorialUICardManager : MonoBehaviour
         .AppendCallback(() =>
         {
             Destroy(card.gameObject);
+            // Change the discard pile colour
+            discardPileImage.GetComponent<Image>().color = Color.white;
         });
         // Bounce the card's y
         float yBounceTime = 0.3f;
