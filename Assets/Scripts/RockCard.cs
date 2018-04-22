@@ -5,7 +5,7 @@ using UnityEngine;
 public class RockCard : Card
 {
     private const int clicksToRemove = 3;
-    private int currentHealth = clicksToRemove;
+    public int currentHealth = clicksToRemove;
     public RockCard() : base(CardType.Rock)
     {
         canRemoveCard = false;
