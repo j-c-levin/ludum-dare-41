@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 [RequireComponent(typeof(TutorialCardManager))]
 public class TutorialUICardManager : MonoBehaviour
@@ -20,6 +21,10 @@ public class TutorialUICardManager : MonoBehaviour
     private TutorialCardManager cardManager;
     // Width of card
     public float cardWidth = 200;
+    // The deck for animating
+    public GameObject deckImage;
+    // The discard pilefor animating
+    public GameObject discardPileImage;
 
     public void Awake()
     {
@@ -51,7 +56,8 @@ public class TutorialUICardManager : MonoBehaviour
                 return;
         }
         // Instantiate the card
-        GameObject newUiCard = Instantiate(newCardObject, Vector2.zero, Quaternion.identity);
+        Vector3 spawnPosition = new Vector3(deckImage.transform.position.x, deckImage.transform.position.y, deckImage.transform.position.z + 0.2f);
+        GameObject newUiCard = Instantiate(newCardObject, spawnPosition, Quaternion.identity);
         // Set it into the hand panel
         newUiCard.transform.SetParent(handView.transform);
         // Reset the scale (because it jumps to 100 or something)
@@ -68,6 +74,18 @@ public class TutorialUICardManager : MonoBehaviour
          {
              useCard(newUiCard.GetComponent<UICard>());
          });
+        //  Animate the card in 
+        float middleX = 951f;
+        Sequence s = DOTween.Sequence();
+        s.Append(
+            newUiCard.GetComponent<RectTransform>()
+            .DOLocalMoveX(middleX, 1f)
+            .SetEase(Ease.OutQuad)
+        );
+        // Set opacity
+        newUiCard.GetComponent<Image>().color = new Color(1, 1, 1, 0);
+        // Fade in
+        s.Insert(0, newUiCard.GetComponent<Image>().DOFade(1, 0.5f));
     }
 
     public void useCard(UICard uiCard)
@@ -84,8 +102,34 @@ public class TutorialUICardManager : MonoBehaviour
         {
             return;
         }
-        // Remove from the game ui
-        Destroy(uiCard.gameObject);
+        RectTransform card = uiCard.GetComponent<RectTransform>();
+        // Remove the used card
+        Sequence s = DOTween.Sequence();
+        s.Insert(0,
+            card.DOLocalMoveX(discardPileImage.transform.localPosition.x, 1f)
+            .SetEase(Ease.OutQuad)
+        )
+        // Destroy the card on end
+        .AppendCallback(() =>
+        {
+            Destroy(card.gameObject);
+        });
+        // Bounce the card's y
+        float yBounceTime = 0.3f;
+        s.Insert(0,
+            card.DOLocalMoveY(card.transform.localPosition.y + 100, yBounceTime)
+            .SetEase(Ease.OutQuad)
+        );
+        s.Insert(yBounceTime,
+            card.DOLocalMoveY(card.transform.localPosition.y, yBounceTime)
+            .SetEase(Ease.InQuad)
+        );
+        // Fade out the card
+        s.Insert(0.4f,
+            card.GetComponent<Image>().DOFade(0, 0.6f)
+        );
+        // Rotate the card
+        s.Insert(0, card.DOLocalRotate(new Vector3(0, 0, 90), 0.5f));
         // For tutorial purposes, hold off on drawing before getting the rock
         if (uiCard.card.type == CardType.Duck)
         {

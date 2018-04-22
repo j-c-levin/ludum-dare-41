@@ -107,8 +107,15 @@ public class CardUIManager : MonoBehaviour
     private void animateCardIn(RectTransform card)
     {
         float xPosition = cardPositions[cardManager.hand.Count - 1];
-        card.DOLocalMoveX(xPosition, 1f)
-        .SetEase(Ease.OutQuad);
+        Sequence s = DOTween.Sequence();
+        s.Append(
+            card.DOLocalMoveX(xPosition, 1f)
+            .SetEase(Ease.OutQuad)
+        );
+        // Set opacity
+        card.GetComponent<Image>().color = new Color(1, 1, 1, 0);
+        // Fade in
+        s.Insert(0, card.GetComponent<Image>().DOFade(1, 0.5f));
     }
 
     private void animateCardToDiscard(RectTransform card)
