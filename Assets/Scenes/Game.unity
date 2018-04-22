@@ -804,106 +804,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 840020811}
---- !u!1001 &852747437
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 224755937892842390, guid: 99e0244f7e377834b98a0620af764564,
-        type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224755937892842390, guid: 99e0244f7e377834b98a0620af764564,
-        type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224755937892842390, guid: 99e0244f7e377834b98a0620af764564,
-        type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224755937892842390, guid: 99e0244f7e377834b98a0620af764564,
-        type: 2}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224755937892842390, guid: 99e0244f7e377834b98a0620af764564,
-        type: 2}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224755937892842390, guid: 99e0244f7e377834b98a0620af764564,
-        type: 2}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224755937892842390, guid: 99e0244f7e377834b98a0620af764564,
-        type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 224755937892842390, guid: 99e0244f7e377834b98a0620af764564,
-        type: 2}
-      propertyPath: m_RootOrder
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 224755937892842390, guid: 99e0244f7e377834b98a0620af764564,
-        type: 2}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224755937892842390, guid: 99e0244f7e377834b98a0620af764564,
-        type: 2}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224755937892842390, guid: 99e0244f7e377834b98a0620af764564,
-        type: 2}
-      propertyPath: m_SizeDelta.x
-      value: 188
-      objectReference: {fileID: 0}
-    - target: {fileID: 224755937892842390, guid: 99e0244f7e377834b98a0620af764564,
-        type: 2}
-      propertyPath: m_SizeDelta.y
-      value: 300
-      objectReference: {fileID: 0}
-    - target: {fileID: 224755937892842390, guid: 99e0244f7e377834b98a0620af764564,
-        type: 2}
-      propertyPath: m_AnchorMin.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224755937892842390, guid: 99e0244f7e377834b98a0620af764564,
-        type: 2}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224755937892842390, guid: 99e0244f7e377834b98a0620af764564,
-        type: 2}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224755937892842390, guid: 99e0244f7e377834b98a0620af764564,
-        type: 2}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224755937892842390, guid: 99e0244f7e377834b98a0620af764564,
-        type: 2}
-      propertyPath: m_Pivot.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 224755937892842390, guid: 99e0244f7e377834b98a0620af764564,
-        type: 2}
-      propertyPath: m_Pivot.y
-      value: 0.5
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: 99e0244f7e377834b98a0620af764564, type: 2}
-  m_IsPrefabParent: 0
 --- !u!1 &892006854
 GameObject:
   m_ObjectHideFlags: 0
@@ -1240,7 +1140,8 @@ MonoBehaviour:
   changeFloorCard: {fileID: 1864538125933342, guid: ebfd4df3c662da3439ef0bdd707b3ef4,
     type: 2}
   rockCard: {fileID: 1231101431832588, guid: 724bad34d299789479da26ed1cab8ee3, type: 2}
-  shuffleCard: {fileID: 0}
+  shuffleCard: {fileID: 1600124857158032, guid: 99e0244f7e377834b98a0620af764564,
+    type: 2}
   handView: {fileID: 1992344404}
   deckImage: {fileID: 840020811}
   discardPileImage: {fileID: 815293105}

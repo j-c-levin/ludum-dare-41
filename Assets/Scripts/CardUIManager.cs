@@ -36,7 +36,7 @@ public class CardUIManager : MonoBehaviour
     // List of current cards
     private GameObject[] uiCards = new GameObject[3];
     // shuffle animation duration
-    private float shuffleAnimationDuration = 0.3f;
+    private float shuffleAnimationDuration = 1f;
     // shuffle animation delay
     private float shuffleAnimationdelay = 0.1f;
 
@@ -132,26 +132,48 @@ public class CardUIManager : MonoBehaviour
     private void shufflingAnimation()
     {
         // Loop every card in the shuffle
-        for (int i = 0; i < cardManager.discardPile.Count; i++)
+        for (int i = 0; i < cardManager.deck.Count; i++)
         {
             // Instantiate a 'card back' for them
-            GameObject tempCard = Instantiate(shuffleCard, discardPileImage.transform.position, discardPileImage.transform.rotation);
+            GameObject tempCard = Instantiate(shuffleCard, Vector2.zero, Quaternion.identity);
             float delay = i * shuffleAnimationdelay;
+            // Parent
+            tempCard.transform.SetParent(discardPileImage.transform);
+            // Set the width and height
+            float cardHeight = handView.GetComponent<RectTransform>().rect.height;
+            tempCard.GetComponent<RectTransform>().sizeDelta = new Vector2(cardWidth, cardHeight);
+            // Reset the scale (because it jumps to 100 or something)
+            tempCard.transform.localScale = Vector2.one;
+            tempCard.transform.localPosition = Vector2.zero;
+            tempCard.transform.rotation = discardPileImage.transform.rotation;
             // Set them to animate in a loop back to the deck
             DOTween.Sequence()
-            // 
             // Move X and give them a delay based on their index
             .Insert(delay,
-                tempCard.transform.DOLocalMoveX(deckImage.transform.position.x, shuffleAnimationDuration)
+                tempCard.transform.DOMoveX(
+                    deckImage.transform.position.x + 1,
+                    shuffleAnimationDuration
+                )
+                .SetEase(Ease.OutQuad)
+            )
+            // Rotate
+            .Insert(delay,
+                tempCard.transform.DOLocalRotate(new Vector3(0, 0, -90), shuffleAnimationDuration * 0.8f)
             )
             // Move y up
             .Insert(delay,
-                tempCard.transform.DOLocalMoveY(deckImage.transform.position.y + 100, shuffleAnimationDuration / 2)
+                tempCard.transform.DOMoveY(deckImage.transform.position.y + 3, shuffleAnimationDuration / 2)
+                .SetEase(Ease.OutQuad)
             )
             // Move y down
             .Insert(delay + shuffleAnimationDuration / 2,
-                tempCard.transform.DOLocalMoveY(deckImage.transform.position.y, shuffleAnimationDuration / 2)
-            );
+                tempCard.transform.DOMoveY(deckImage.transform.position.y + 1.5f, shuffleAnimationDuration / 2)
+                .SetEase(Ease.InQuad)
+            )
+            .AppendCallback(() =>
+            {
+                Destroy(tempCard);
+            });
         }
     }
 
