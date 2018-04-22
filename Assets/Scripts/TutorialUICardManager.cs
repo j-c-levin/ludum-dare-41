@@ -129,7 +129,7 @@ public class TutorialUICardManager : MonoBehaviour
             card.GetComponent<Image>().DOFade(0, 0.6f)
         );
         // Rotate the card
-        s.Insert(0, card.DOLocalRotate(new Vector3(0, 0, 90), 0.5f));
+        s.Insert(0, card.DOLocalRotate(new Vector3(0, 0, -90), 0.5f));
         // For tutorial purposes, hold off on drawing before getting the rock
         if (uiCard.card.type == CardType.Duck)
         {

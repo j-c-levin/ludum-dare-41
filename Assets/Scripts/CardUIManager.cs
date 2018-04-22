@@ -24,7 +24,7 @@ public class CardUIManager : MonoBehaviour
     // Width of card
     public float cardWidth = 188f;
     // X positions of the cards
-    private float[] cardPositions = new float[] { 680f, 951f, 1223f };
+    private float[] cardPositions = new float[] { 1223f, 951f, 680f };
     // Reference for CardManager
     private CardManager cardManager;
     // List of current cards
@@ -146,10 +146,10 @@ public class CardUIManager : MonoBehaviour
             card.GetComponent<Image>().DOFade(0, 0.6f)
         );
         // Rotate the card
-        s.Insert(0, card.DOLocalRotate(new Vector3(0, 0, 90), 0.5f));
+        s.Insert(0, card.DOLocalRotate(new Vector3(0, 0, -90), 0.5f));
         // Shuffle along the other cards in the array
-        // The left one
-        if (card.position.x < -1)
+        // The right one
+        if (card.position.x > 1)
         {
             float xPosition = cardPositions[0];
             uiCards[0] = uiCards[1];
@@ -161,7 +161,7 @@ public class CardUIManager : MonoBehaviour
             .SetEase(Ease.OutQuad);
         }
         // The middle one
-        else if (card.position.x < 1)
+        else if (card.position.x > -1)
         {
             float xPosition = cardPositions[1];
             uiCards[1] = uiCards[2];
