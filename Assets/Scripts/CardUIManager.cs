@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 [RequireComponent(typeof(CardManager))]
 public class CardUIManager : MonoBehaviour
@@ -16,10 +17,16 @@ public class CardUIManager : MonoBehaviour
     public GameObject rockCard;
     // The Scroll View for the hand
     public GameObject handView;
+    // The deck for animating
+    public GameObject deckImage;
+    // The discard pilefor animating
+    public GameObject discardPileImage;
+    // Width of card
+    public float cardWidth = 188f;
+    // X positions of the cards
+    private float[] cardPositions = new float[] { 680f, 951f, 1223f };
     // Reference for CardManager
     private CardManager cardManager;
-    // Width of card
-    public float cardWidth = 200;
 
     public void Awake()
     {
@@ -51,7 +58,8 @@ public class CardUIManager : MonoBehaviour
                 return;
         }
         // Instantiate the card
-        GameObject newUiCard = Instantiate(newCardObject, Vector2.zero, Quaternion.identity);
+        Vector3 spawnPosition = new Vector3(deckImage.transform.position.x, deckImage.transform.position.y, deckImage.transform.position.z + 0.2f);
+        GameObject newUiCard = Instantiate(newCardObject, spawnPosition, Quaternion.identity);
         // Set it into the hand panel
         newUiCard.transform.SetParent(handView.transform);
         // Reset the scale (because it jumps to 100 or something)
@@ -68,6 +76,8 @@ public class CardUIManager : MonoBehaviour
          {
              useCard(newUiCard.GetComponent<UICard>());
          });
+        // Animate the card
+        animateCardIn(newUiCard.GetComponent<RectTransform>());
     }
 
     public void useCard(UICard uiCard)
@@ -88,5 +98,16 @@ public class CardUIManager : MonoBehaviour
         Destroy(uiCard.gameObject);
         // Redraw a new card
         cardManager.draw(1);
+    }
+
+    private void animateCardIn(RectTransform card)
+    {
+        float xPosition = cardPositions[cardManager.hand.Count - 1];
+        card.DOLocalMoveX(xPosition, 1f).SetEase(Ease.OutQuad);
+    }
+
+    private void animateCardToDiscard(RectTransform card)
+    {
+
     }
 }

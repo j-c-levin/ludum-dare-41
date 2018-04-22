@@ -21,7 +21,7 @@ public class CardManager : MonoBehaviour
     // Event listener for drawing cards
     public DrawCardDelegate drawCardDelegate;
     // List of current hand
-    private List<Card> hand = new List<Card>();
+    public readonly List<Card> hand = new List<Card>();
     // List of current deck
     private Stack<Card> deck = new Stack<Card>();
     // Discard pile
@@ -71,6 +71,11 @@ public class CardManager : MonoBehaviour
     // Function to draw a new card from deck to hand
     public void draw(int drawNumber)
     {
+        StartCoroutine(drawCoroutine(drawNumber));
+    }
+
+    private IEnumerator drawCoroutine(int drawNumber)
+    {
         // Check if deck needs discard pile to be shuffled in
         for (int i = 0; i < drawNumber; i++)
         {
@@ -81,7 +86,7 @@ public class CardManager : MonoBehaviour
                 // If the deck remains empty, it's because all available cards are already in the hand, so just do nothing
                 if (deck.Count == 0)
                 {
-                    return;
+                    yield return null;
                 }
             }
             // Draw a card from deck to hand
@@ -91,6 +96,7 @@ public class CardManager : MonoBehaviour
             {
                 drawCardDelegate(topCard);
             }
+            yield return new WaitForSeconds(0.3f);
         }
     }
 
