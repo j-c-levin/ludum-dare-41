@@ -15,6 +15,8 @@ public class CardUIManager : MonoBehaviour
     public GameObject changeFloorCard;
     // Prefab for rock
     public GameObject rockCard;
+    // Prefab for shuffling card
+    public GameObject shuffleCard;
     // The Scroll View for the hand
     public GameObject handView;
     // The deck for animating
@@ -33,6 +35,10 @@ public class CardUIManager : MonoBehaviour
     private CardManager cardManager;
     // List of current cards
     private GameObject[] uiCards = new GameObject[3];
+    // shuffle animation duration
+    private float shuffleAnimationDuration = 0.3f;
+    // shuffle animation delay
+    private float shuffleAnimationdelay = 0.1f;
 
     public void Awake()
     {
@@ -44,6 +50,11 @@ public class CardUIManager : MonoBehaviour
 
     public void DrawCard(Card newCard)
     {
+        // Should the shuffling animation play
+        if (deckImage.GetComponent<Image>().color == Color.gray)
+        {
+            shufflingAnimation();
+        }
         deckCounterText.text = cardManager.deck.Count.ToString();
         discardCounterText.text = cardManager.discardPile.Count.ToString();
         GameObject newCardObject = null;
@@ -116,6 +127,32 @@ public class CardUIManager : MonoBehaviour
         animateCardToDiscard(uiCard.GetComponent<RectTransform>());
         // Redraw a new card
         cardManager.draw(1);
+    }
+
+    private void shufflingAnimation()
+    {
+        // Loop every card in the shuffle
+        for (int i = 0; i < cardManager.discardPile.Count; i++)
+        {
+            // Instantiate a 'card back' for them
+            GameObject tempCard = Instantiate(shuffleCard, discardPileImage.transform.position, discardPileImage.transform.rotation);
+            float delay = i * shuffleAnimationdelay;
+            // Set them to animate in a loop back to the deck
+            DOTween.Sequence()
+            // 
+            // Move X and give them a delay based on their index
+            .Insert(delay,
+                tempCard.transform.DOLocalMoveX(deckImage.transform.position.x, shuffleAnimationDuration)
+            )
+            // Move y up
+            .Insert(delay,
+                tempCard.transform.DOLocalMoveY(deckImage.transform.position.y + 100, shuffleAnimationDuration / 2)
+            )
+            // Move y down
+            .Insert(delay + shuffleAnimationDuration / 2,
+                tempCard.transform.DOLocalMoveY(deckImage.transform.position.y, shuffleAnimationDuration / 2)
+            );
+        }
     }
 
     private void animateCardIn(RectTransform card)

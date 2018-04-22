@@ -73,9 +73,6 @@ public class TutorialUICardManager : MonoBehaviour
         // Set the width and height
         float cardHeight = handView.GetComponent<RectTransform>().rect.height;
         newUiCard.GetComponent<RectTransform>().sizeDelta = new Vector2(cardWidth, cardHeight);
-        // Set anchor
-        // newUiCard.GetComponent<RectTransform>().anchorMax = new Vector2(0f, 0.5f);
-        // newUiCard.GetComponent<RectTransform>().anchorMin = new Vector2(0f, 0.5f);
         // Set the card's data
         newUiCard.GetComponent<UICard>().card = newCard;
         // Add an event handler for when it is clicked
