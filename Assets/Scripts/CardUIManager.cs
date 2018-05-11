@@ -226,7 +226,7 @@ public class CardUIManager : MonoBehaviour
         s.Insert(0, card.DOLocalRotate(new Vector3(0, 0, -90), 0.5f));
         // Shuffle along the other cards in the array
         // The right one
-        if (card.localPosition.x > -700)
+        if (card.gameObject == uiCards[0])
         {
             float xPosition = cardPositions[0].transform.localPosition.x;
             uiCards[0] = uiCards[1];
@@ -238,7 +238,7 @@ public class CardUIManager : MonoBehaviour
             .SetEase(Ease.OutQuad);
         }
         // The middle one
-        else if (card.localPosition.x > -1000)
+        else if (card.gameObject == uiCards[1])
         {
             float xPosition = cardPositions[1].transform.localPosition.x;
             uiCards[1] = uiCards[2];
