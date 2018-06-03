@@ -243,8 +243,8 @@ PlayerSettings:
   AndroidTargetDevice: 0
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: 
-  AndroidKeyaliasName: 
+  AndroidKeystoreName: C:/Users/joshu/Documents/ludum-dare-41/Builds/android/dashgo.keystore
+  AndroidKeyaliasName: main
   AndroidTVCompatibility: 0
   AndroidIsGame: 1
   AndroidEnableTango: 0
